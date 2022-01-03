@@ -2,7 +2,7 @@
 title: HappyWalkers
 SEOTitle: HappyWalkers | Blog
 header-img: img/post-bg-desk.jpg
-email: none
+email: 763435962@qq.com
 description: "HappyWalkers and his blog"
 keyword: "My blog"
 url: "https://HappyWalkers.github.io"          # your host, for absolute URL
@@ -11,7 +11,7 @@ github_repo: "https://github.com/HappyWalkers/HappyWalkers.github.io.git" # you 
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "sidebar-about-description"
+sidebar-about-description: "sunflower"
 sidebar-avatar: /img/avatar_binggan.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
