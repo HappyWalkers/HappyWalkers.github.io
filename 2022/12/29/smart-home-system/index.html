@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>Smart Home Systems - Yunpeng&#39;s Blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Introduction       &#x2F;&#x2F; the embedded code   Our work is an overall system, constructing a one-stop smart home solution from different perspectives, mainly including three modules: smart door control, sm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Smart Home Systems">
+<meta property="og:url" content="https://happywalkers.github.io/2022/12/29/smart-home-system/index.html">
+<meta property="og:site_name" content="Yunpeng&#39;s Blog">
+<meta property="og:description" content="Introduction       &#x2F;&#x2F; the embedded code   Our work is an overall system, constructing a one-stop smart home solution from different perspectives, mainly including three modules: smart door control, sm">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-12-29T19:53:58.000Z">
+<meta property="article:modified_time" content="2024-02-24T23:46:06.873Z">
+<meta property="article:author" content="Yunpeng Wang">
+<meta property="article:tag" content="Embedded Systems">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1708832232981">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1708832232981">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1708832232981">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1708832232981"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(https://s2.loli.net/2024/02/24/fmWhHj2RC8VPIFM.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Yunpeng Wang" class="mdui-btn mdui-btn-icon"><img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Yunpeng Wang">
+            <img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang" alt="Yunpeng Wang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>10</div>
+        <div><span>Tags</span>7</div>
+        <div><span>Categories</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="Home">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                Home
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/HappyWalkers"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/25/chord/">Chord</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/cis555/">Google-style Search Engine - A distributed system</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam620/">Drone - path planning, trajectory planning, and PID controller</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam520/">Robot arm control</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/01/UE5/">Gems -- UE5 Game Development</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2024 Yunpeng Wang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: 62.5%;"> 
+            <img src="https://s2.loli.net/2022/12/29/uKdXVlOvp6iShqC.png" alt="Smart Home Systems" loading="lazy">
+            <h1>Smart Home Systems</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2022年12月29日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><div class="mdui-video-container">
+    <iframe src="//player.bilibili.com/player.html?aid=684730157&bvid=BV1BU4y197dp&cid=738874866&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe> // the embedded code
+</div>
+
+<p>Our work is an overall system, constructing a one-stop smart home solution from different perspectives, mainly including three modules: smart door control, smart home appliance control, and active health monitoring.</p>
+<h1 id="Smart-Gate-Control"><a href="#Smart-Gate-Control" class="headerlink" title="Smart Gate Control"></a>Smart Gate Control</h1><p>Smart Gate Control is a face recognition system based on computer vision technology and deep learning. Its core is a Raspberry Pi 4B and an external camera. We trained a residual network for face recognition, and implemented a graphical user interface using PyQt, allowing users to complete face recognition with just a tap of a button, allowing the automatic control system to open the door.</p>
+<h1 id="Smart-Appliance-Control"><a href="#Smart-Appliance-Control" class="headerlink" title="Smart Appliance Control"></a>Smart Appliance Control</h1><p>Smart home appliance control is a user-friendly interactive system developed based on embedded technology. Its core is a STM32 development board, which provides a rich interface as our development platform. We use a touch display screen to provide a graphical user interface, and send signals to control home appliances through the user’s clicks. The current demo realizes the switching of curtains and lights. We use STM32F429 to control the stepper motor to drive the curtain movement. The user can realize the opening and closing of the curtain by pressing the button or touching the button on the touch screen. At the same time, the GPIO of STM32F429 is used to control the relay corresponding to the light, so that the user can remotely control the indoor lighting when touching the capacitive LCD touch screen.</p>
+<h1 id="Robot-following-health-monitoring"><a href="#Robot-following-health-monitoring" class="headerlink" title="Robot-following health monitoring"></a>Robot-following health monitoring</h1><p>The robot-following health monitoring module senses the strength of the signal through the radar and other sensing devices equipped with the smart home robot, locates the human body, identifies obstacles, and dynamically plans the path. Realize the automatic follow-up of the care object. The automatic follow function of the smart home robot can locate the location of the caretaker in real time, and record the movement of the caretaker with a camera. Provide better security for vulnerable groups living alone. In the process of realizing automatic follow-up, the care module adopts the yolo framework of deep learning to realize the posture detection of the followed target and judge whether the care target has fallen. Studies have shown that the total case fatality rate of the elderly who falls is 5 times higher than that of the elderly without falls, and the case fatality rate of those who cannot stand up 1 hour after the fall is even twice as high. In the process of caring for vulnerable groups living alone, timely monitoring of falls is of great significance. Through the automatic follow-up and fall detection functions in the nursing module of the smart home robot, the risk of death or injury caused by the accidental fall of the elderly can be greatly reduced. In short, the automation and intelligence of home life is the current development trend of information appliances. I believe that this system will definitely arouse people’s interest and have a wider range of application scenarios after being improved.</p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Embedded-Systems/" rel="tag">Embedded Systems</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1708832232957"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Smart-Gate-Control"><span class="toc-number">2.</span> <span class="toc-text">Smart Gate Control</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Smart-Appliance-Control"><span class="toc-number">3.</span> <span class="toc-text">Smart Appliance Control</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Robot-following-health-monitoring"><span class="toc-number">4.</span> <span class="toc-text">Robot-following health monitoring</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

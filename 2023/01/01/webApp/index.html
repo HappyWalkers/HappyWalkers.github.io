@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>Web application: A course review and comments website - Yunpeng&#39;s Blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="IntroductionIn the first version, I developed the web with Django and host it with Amazon EC2, a wonderful service provided by AWS.In the second version, I change to Spring Boot and Angular to provide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web application: A course review and comments website">
+<meta property="og:url" content="https://happywalkers.github.io/2023/01/01/webApp/index.html">
+<meta property="og:site_name" content="Yunpeng&#39;s Blog">
+<meta property="og:description" content="IntroductionIn the first version, I developed the web with Django and host it with Amazon EC2, a wonderful service provided by AWS.In the second version, I change to Spring Boot and Angular to provide">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1UN-zdgmLh4opIqLH5lLqD0NkATRROZvU">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=14MHmdJmqI51kg3xT-Ed10pOx1fbn7hty">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1sE4Rd8lLLMYgjljlUh3m6TKsyRu1a16_">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1PEwBCwU0dKUgp09VBZkUmp5cI2BkjdDA">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1Gfoi_NLqLIJatA-C8wjVU1kjJRmxH3M3">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1sEM6XfMzXmVLkf7-xTrpEV0mJoA3UHAY">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1RutGyrpD24nh_kr2fxs_aDNxd8Fse6b-">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1z1lU4T4C0RpqctG1T8xe4uTYGbqtu1QL">
+<meta property="og:image" content="https://drive.google.com/uc?export=view&id=1QTqYmAgQTp9en1N_gWzIPuc0i7bkQQZR">
+<meta property="article:published_time" content="2023-01-01T19:53:58.000Z">
+<meta property="article:modified_time" content="2024-02-24T23:46:06.873Z">
+<meta property="article:author" content="Yunpeng Wang">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://drive.google.com/uc?export=view&id=1UN-zdgmLh4opIqLH5lLqD0NkATRROZvU">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1708832232978">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1708832232978">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1708832232978">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1708832232978"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(https://s2.loli.net/2024/02/24/fmWhHj2RC8VPIFM.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Yunpeng Wang" class="mdui-btn mdui-btn-icon"><img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Yunpeng Wang">
+            <img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang" alt="Yunpeng Wang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>10</div>
+        <div><span>Tags</span>7</div>
+        <div><span>Categories</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="Home">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                Home
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/HappyWalkers"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/25/chord/">Chord</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/cis555/">Google-style Search Engine - A distributed system</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam620/">Drone - path planning, trajectory planning, and PID controller</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam520/">Robot arm control</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/01/UE5/">Gems -- UE5 Game Development</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2024 Yunpeng Wang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: 62.5%;"> 
+            <img src="https://s2.loli.net/2022/12/30/ZGMPlS4LWX7f2ji.png" alt="Web application: A course review and comments website" loading="lazy">
+            <h1>Web application: A course review and comments website</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2023年01月01日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>In the first version, I developed the web with Django and host it with Amazon EC2, a wonderful service provided by AWS.<br>In the second version, I change to Spring Boot and Angular to provide a better front end GUI, and I would like to present some pictures of the second-version-web.</p>
+<h4 id="Presentation"><a href="#Presentation" class="headerlink" title="Presentation"></a>Presentation</h4><h5 id="Home-page"><a href="#Home-page" class="headerlink" title="Home page"></a>Home page</h5><p>Every course here is a card or widget with two buttons at the right corner. It’s a very clear way to display its key information.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1UN-zdgmLh4opIqLH5lLqD0NkATRROZvU" alt="image" data-caption="image" loading="lazy"></p>
+<h5 id="Create-a-new-course"><a href="#Create-a-new-course" class="headerlink" title="Create a new course"></a>Create a new course</h5><p>Using the button at the top menu bar, we can create a new course by filling its information in the form.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=14MHmdJmqI51kg3xT-Ed10pOx1fbn7hty" alt="image" data-caption="image" loading="lazy"><br>Now, the created course is displayed at the bottom line.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1sE4Rd8lLLMYgjljlUh3m6TKsyRu1a16_" alt="image" data-caption="image" loading="lazy"></p>
+<h5 id="Update-a-course"><a href="#Update-a-course" class="headerlink" title="Update a course"></a>Update a course</h5><p>We can update the information by clicking the pencil icon at the right corner of a widget. In this case, we choose to update the cover image URL of the test course.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1PEwBCwU0dKUgp09VBZkUmp5cI2BkjdDA" alt="image" data-caption="image" loading="lazy"><br>Now, the widget of test course obtains a better looking cover image.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1Gfoi_NLqLIJatA-C8wjVU1kjJRmxH3M3" alt="image" data-caption="image" loading="lazy"></p>
+<h5 id="Delete-a-course"><a href="#Delete-a-course" class="headerlink" title="Delete a course"></a>Delete a course</h5><p>If we want to delete an expired course, we can push the cross button at a widget’s right corner.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1sEM6XfMzXmVLkf7-xTrpEV0mJoA3UHAY" alt="image" data-caption="image" loading="lazy"><br>In this case, we try deleting the Introduction for Blockchain and Money.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1RutGyrpD24nh_kr2fxs_aDNxd8Fse6b-" alt="image" data-caption="image" loading="lazy"><br>Now, it’s gone.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1z1lU4T4C0RpqctG1T8xe4uTYGbqtu1QL" alt="image" data-caption="image" loading="lazy"></p>
+<h5 id="Search-for-a-course"><a href="#Search-for-a-course" class="headerlink" title="Search for a course"></a>Search for a course</h5><p>We can search for a course using its name, description, college, etc.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://drive.google.com/uc?export=view&id=1QTqYmAgQTp9en1N_gWzIPuc0i7bkQQZR" alt="image" data-caption="image" loading="lazy"></p>
+<h4 id="Source-code"><a href="#Source-code" class="headerlink" title="Source code"></a>Source code</h4><h5 id="First-version"><a href="#First-version" class="headerlink" title="First version"></a>First version</h5><p><a target="_blank" rel="noopener" href="https://github.com/HappyWalkers/studentLifeWeb.git">https://github.com/HappyWalkers/studentLifeWeb.git</a></p>
+<h5 id="Second-version"><a href="#Second-version" class="headerlink" title="Second version"></a>Second version</h5><p>Front end: <a target="_blank" rel="noopener" href="https://github.com/HappyWalkers/studentLife2FrontEnd.git">https://github.com/HappyWalkers/studentLife2FrontEnd.git</a><br>Back end: <a target="_blank" rel="noopener" href="https://github.com/HappyWalkers/StudentLife2Backend.git">https://github.com/HappyWalkers/StudentLife2Backend.git</a></p>
+
+
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Web/" rel="tag">Web</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1708832232956"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Presentation"><span class="toc-number">2.</span> <span class="toc-text">Presentation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Home-page"><span class="toc-number">2.1.</span> <span class="toc-text">Home page</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Create-a-new-course"><span class="toc-number">2.2.</span> <span class="toc-text">Create a new course</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Update-a-course"><span class="toc-number">2.3.</span> <span class="toc-text">Update a course</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Delete-a-course"><span class="toc-number">2.4.</span> <span class="toc-text">Delete a course</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Search-for-a-course"><span class="toc-number">2.5.</span> <span class="toc-text">Search for a course</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Source-code"><span class="toc-number">3.</span> <span class="toc-text">Source code</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#First-version"><span class="toc-number">3.1.</span> <span class="toc-text">First version</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Second-version"><span class="toc-number">3.2.</span> <span class="toc-text">Second version</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

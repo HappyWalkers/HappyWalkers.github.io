@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>Google-style Search Engine - A distributed system - Yunpeng&#39;s Blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="ImplementationHTTP Protocol and Web ServerHTTP 1.1https:&#x2F;&#x2F;www.ietf.org&#x2F;rfc&#x2F;rfc2616.txt Distributed Key Value StoreRDD (Resilient Dataset)the table that represents an RDD R :&#x3D; {v 1 , v 2 , . . . ,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google-style Search Engine - A distributed system">
+<meta property="og:url" content="https://happywalkers.github.io/2023/09/04/cis555/index.html">
+<meta property="og:site_name" content="Yunpeng&#39;s Blog">
+<meta property="og:description" content="ImplementationHTTP Protocol and Web ServerHTTP 1.1https:&#x2F;&#x2F;www.ietf.org&#x2F;rfc&#x2F;rfc2616.txt Distributed Key Value StoreRDD (Resilient Dataset)the table that represents an RDD R :&#x3D; {v 1 , v 2 , . . . ,">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2023/09/07/r8vd71i9yPcaDXl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/07/baCh4uTsqkxDwZW.png">
+<meta property="article:published_time" content="2023-09-04T22:41:46.000Z">
+<meta property="article:modified_time" content="2024-02-25T03:35:44.477Z">
+<meta property="article:author" content="Yunpeng Wang">
+<meta property="article:tag" content="Distributed Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/09/07/r8vd71i9yPcaDXl.png">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1708832232974">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1708832232974">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1708832232974">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1708832232974"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(https://s2.loli.net/2024/02/24/fmWhHj2RC8VPIFM.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Yunpeng Wang" class="mdui-btn mdui-btn-icon"><img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Yunpeng Wang">
+            <img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang" alt="Yunpeng Wang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>10</div>
+        <div><span>Tags</span>7</div>
+        <div><span>Categories</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="Home">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                Home
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/HappyWalkers"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/25/chord/">Chord</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/cis555/">Google-style Search Engine - A distributed system</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam620/">Drone - path planning, trajectory planning, and PID controller</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam520/">Robot arm control</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/01/UE5/">Gems -- UE5 Game Development</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2024 Yunpeng Wang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: 62.5%;"> 
+            <img src="https://s2.loli.net/2023/09/05/usnEoftLxPzj8ry.png" alt="Google-style Search Engine - A distributed system" loading="lazy">
+            <h1>Google-style Search Engine - A distributed system</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2023年09月04日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="HTTP-Protocol-and-Web-Server"><a href="#HTTP-Protocol-and-Web-Server" class="headerlink" title="HTTP Protocol and Web Server"></a>HTTP Protocol and Web Server</h3><h4 id="HTTP-1-1"><a href="#HTTP-1-1" class="headerlink" title="HTTP 1.1"></a>HTTP 1.1</h4><p><a target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc2616.txt">https://www.ietf.org/rfc/rfc2616.txt</a></p>
+<h3 id="Distributed-Key-Value-Store"><a href="#Distributed-Key-Value-Store" class="headerlink" title="Distributed Key Value Store"></a>Distributed Key Value Store</h3><h4 id="RDD-Resilient-Dataset"><a href="#RDD-Resilient-Dataset" class="headerlink" title="RDD (Resilient Dataset)"></a>RDD (Resilient Dataset)</h4><p>the table that represents an RDD R :&#x3D; {v 1 , v 2 , . . . , v n } should have n rows; row #i should have an arbitrary but unique key and a column called value, which should contain v i . The keys should be at least somewhat random, so the table will be spread roughly evenly across the workers.</p>
+<h4 id="Pair-RDD"><a href="#Pair-RDD" class="headerlink" title="Pair RDD"></a>Pair RDD</h4><p>The table that represents a PairRDD P :&#x3D; {(k 1 , v 1 ), (k 2 , v 2 ), . . . , (k n , v n )} should have as many rows as there are unique keys in the RDD; the row for an RDD key k should have k as its KVS key, and a column with a unique name for each value v j , where (k, v j ) ∈ P ; the value in that column should be v j<br>A row in kvs can be parsed as many Pair RDDs.</p>
+<h3 id="Flame-Distributed-Data-Analysis-Framework"><a href="#Flame-Distributed-Data-Analysis-Framework" class="headerlink" title="Flame: Distributed Data Analysis Framework"></a>Flame: Distributed Data Analysis Framework</h3><p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://s2.loli.net/2023/09/07/r8vd71i9yPcaDXl.png" alt="KVS.png" data-caption="KVS.png" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://s2.loli.net/2023/09/07/baCh4uTsqkxDwZW.png" alt="Flame.png" data-caption="Flame.png" loading="lazy"></p>
+<h3 id="Page-Rank"><a href="#Page-Rank" class="headerlink" title="Page Rank"></a>Page Rank</h3><ol>
+<li>Load the data (PageRank): make (u,”1.0,1.0,L”) pairs, where L is a comma-separated list of normalized links you found on the page with URL u. We’ll call this the “state table” below.</li>
+<li>Compute the transfer table: For each pair (u,”r c ,r p ,L”), where L contains n URLs, compute n pairs (l i ,v), where v &#x3D; 0.85 · r c &#x2F;n. In other words, each of the pages that page u has a link to gets a fraction 1&#x2F;n of u’s current rank r c , with the decay factor d &#x3D; 0.85 already applied.</li>
+<li>Aggregate the transfers: adding up all the v i from the many P (u,v i ) pairs for each page u</li>
+<li>Update the state table: At this point, we have two PairRDDs: the old state table and an aggregated transfer table, both with the page URL as the key. We need to move the “new” rank from the latter to the former. To do this, first invoke join, which will combine the elements from both tables by URL, and concatenate the values, separated by a comma. This is not yet what we want – there are more fields in the join result than in the original state table – so you’ll have to follow up with another flatMapToPair that throws out the old “previous rank” entry, moves the old “current rank” entry to the new “previous rank” entry, and moves the newly computed aggregate to the “current rank” entry. This is also a good opportunity to add the 0.15 from the rank source.</li>
+<li>Iterate, and check for convergence: Put the code so far (after the initial load) into an infinite loop; at the end of the loop, replace the old state table with the new one, and then compute the maximum change in ranks across all the pages. This can be done with a flatMap, where you compute the absolute difference between the old and current ranks for each page, followed by a fold that computes the maximum of these. If the maximum is below the convergence threshold, exit the loop.</li>
+</ol>
+<h3 id="TF-IDF"><a href="#TF-IDF" class="headerlink" title="TF-IDF"></a>TF-IDF</h3><ol>
+<li>Load the crawler data. Extract and clean words from page body. </li>
+<li>For each distinct set of words from body, count the number of occurences of a word from the particular page body. </li>
+<li>Add distinct words into a persistent table, ‘index’, with unique words as key. For value, add a string concatenated with the hashed url and number of word occurences, e.g. ahzxghtoiu:1 (meaning there is 1 occurence of word in hashed url of ahzxghtoiu).</li>
+<li>Once all words are processed for all crawler data, calculate the IDF value by retrieving the occurrences of words that occur in different pages. The formula used to calculate TF-IDF in our case is log normalization-IDF, which is (1 + log f_t,d) * log (N&#x2F;n_t), where f_t,d is the term frequency in a particular page, N is the total number of unique words in the index, n is the number of documents that contain the particular word&#x2F;term.</li>
+</ol>
+<p>** Note: IDF values are only calculated for query words, i.e. the value will be generated when the query comes in.</p>
+<h1 id="Report"><a href="#Report" class="headerlink" title="Report"></a>Report</h1><div class="row">
+    <iframe src="https://drive.google.com/file/d/1qTo7_sSoHQCmEYga_lrxKr7x0wLIB5Wb/preview" style="width:100%; height:550px"></iframe>
+</div>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Distributed-Systems/" rel="tag">Distributed Systems</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1708832232954"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Implementation"><span class="toc-number">1.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-Protocol-and-Web-Server"><span class="toc-number">1.1.</span> <span class="toc-text">HTTP Protocol and Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-1-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">HTTP 1.1</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Distributed-Key-Value-Store"><span class="toc-number">1.2.</span> <span class="toc-text">Distributed Key Value Store</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RDD-Resilient-Dataset"><span class="toc-number">1.2.1.</span> <span class="toc-text">RDD (Resilient Dataset)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pair-RDD"><span class="toc-number">1.2.2.</span> <span class="toc-text">Pair RDD</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flame-Distributed-Data-Analysis-Framework"><span class="toc-number">1.3.</span> <span class="toc-text">Flame: Distributed Data Analysis Framework</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Rank"><span class="toc-number">1.4.</span> <span class="toc-text">Page Rank</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TF-IDF"><span class="toc-number">1.5.</span> <span class="toc-text">TF-IDF</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Report"><span class="toc-number"></span> <span class="toc-text">Report</span></a>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
