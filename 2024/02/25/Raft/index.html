@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>Raft - Yunpeng&#39;s Blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="RaftRaft is a consensus algorithm designed to be more understandable and practical than Paxos. Raft separates key consensus elements like leader election, log replication, and safety into distinct com">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raft">
+<meta property="og:url" content="https://happywalkers.github.io/2024/02/25/Raft/index.html">
+<meta property="og:site_name" content="Yunpeng&#39;s Blog">
+<meta property="og:description" content="RaftRaft is a consensus algorithm designed to be more understandable and practical than Paxos. Raft separates key consensus elements like leader election, log replication, and safety into distinct com">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2024/02/25/miEIZ7MszPaj6Le.png">
+<meta property="og:image" content="https://s2.loli.net/2024/02/25/8XLBvhgxIodaJuW.png">
+<meta property="article:published_time" content="2024-02-25T05:15:24.000Z">
+<meta property="article:modified_time" content="2024-02-25T05:30:02.607Z">
+<meta property="article:author" content="Yunpeng Wang">
+<meta property="article:tag" content="Distributed System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/02/25/miEIZ7MszPaj6Le.png">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1708839017889">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1708839017889">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1708839017889">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1708839017889"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(https://s2.loli.net/2024/02/24/fmWhHj2RC8VPIFM.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Yunpeng Wang" class="mdui-btn mdui-btn-icon"><img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Yunpeng Wang">
+            <img src="https://s2.loli.net/2022/12/30/1bQRNzZj8giLPuh.jpg" alt="Yunpeng Wang" alt="Yunpeng Wang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>11</div>
+        <div><span>Tags</span>8</div>
+        <div><span>Categories</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="Home">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                Home
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/HappyWalkers"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/25/Raft/">Raft</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/25/chord/">Chord</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/cis555/">Google-style Search Engine - A distributed system</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam620/">Drone - path planning, trajectory planning, and PID controller</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/04/meam520/">Robot arm control</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-link">
+		<ul>
+        
+		</ul>
+    </div>
+</div>
+<style>
+.nexmoe-widget-wrap .nexmoe-link ul li a {
+    text-align : center;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a img {
+    max-width : 100%;
+}
+.nexmoe-widget-wrap .nexmoe-link ul li a p {
+    margin: 10px 0;
+}
+</style>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2024 Yunpeng Wang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: 62.5%;"> 
+            <img src="https://s2.loli.net/2024/02/25/PtuMQdYwpfL8vzn.png" alt="Raft" loading="lazy">
+            <h1>Raft</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2024年02月25日</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <h2 id="Raft"><a href="#Raft" class="headerlink" title="Raft"></a>Raft</h2><p>Raft is a consensus algorithm designed to be more understandable and practical than Paxos. Raft separates key consensus elements like leader election, log replication, and safety into distinct components to simplify comprehension and implementation. It introduces a novel approach for cluster membership changes and emphasizes understandability without compromising efficiency. Raft aims to provide a foundation for building reliable, large-scale software systems through a structured framework that simplifies the consensus process.<br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://s2.loli.net/2024/02/25/miEIZ7MszPaj6Le.png" alt="Raft" data-caption="Raft" loading="lazy"><br><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://s2.loli.net/2024/02/25/8XLBvhgxIodaJuW.png" alt="Raft" data-caption="Raft" loading="lazy"></p>
+<h3 id="data-racing"><a href="#data-racing" class="headerlink" title="data racing"></a>data racing</h3><p>Rule 1: Whenever you have data that more than one goroutine uses, and<br>at least one goroutine might modify the data, the goroutines should<br>use locks to prevent simultaneous use of the data. The Go race<br>detector is pretty good at detecting violations of this rule (though<br>it won’t help with any of the rules below).</p>
+<h3 id="Granularity-of-locks"><a href="#Granularity-of-locks" class="headerlink" title="Granularity of locks"></a>Granularity of locks</h3><p>Rule 2: Whenever code makes a sequence of modifications to shared<br>data, and other goroutines might malfunction if they looked at the<br>data midway through the sequence, you should use a lock around the<br>whole sequence.</p>
+<p>An example:</p>
+<p>  rf.mu.Lock()<br>  rf.currentTerm +&#x3D; 1<br>  rf.state &#x3D; Candidate<br>  rf.mu.Unlock()</p>
+<p>It would be a mistake for another goroutine to see either of these<br>updates alone (i.e. the old state with the new term, or the new term<br>with the old state). So we need to hold the lock continuously over the<br>whole sequence of updates. All other code that uses rf.currentTerm or<br>rf.state must also hold the lock, in order to ensure exclusive access<br>for all uses.</p>
+<p>The code between Lock() and Unlock() is often called a “critical<br>section.” The locking rules a programmer chooses (e.g. “a goroutine<br>must hold rf.mu when using rf.currentTerm or rf.state”) are often<br>called a “locking protocol”.</p>
+<p>Rule 3: Whenever code does a sequence of reads of shared data (or<br>reads and writes), and would malfunction if another goroutine modified<br>the data midway through the sequence, you should use a lock around the<br>whole sequence.</p>
+<p>An example that could occur in a Raft RPC handler:</p>
+<p>  rf.mu.Lock()<br>  if args.Term &gt; rf.currentTerm {<br>   rf.currentTerm &#x3D; args.Term<br>  }<br>  rf.mu.Unlock()</p>
+<p>This code needs to hold the lock continuously for the whole sequence.<br>Raft requires that currentTerm only increases, and never decreases.<br>Another RPC handler could be executing in a separate goroutine; if it<br>were allowed to modify rf.currentTerm between the if statement and the<br>update to rf.currentTerm, this code might end up decreasing<br>rf.currentTerm. Hence the lock must be held continuously over the<br>whole sequence. In addition, every other use of currentTerm must hold<br>the lock, to ensure that no other goroutine modifies currentTerm<br>during our critical section.</p>
+<p>Real Raft code would need to use longer critical sections than these<br>examples; for example, a Raft RPC handler should probably hold the<br>lock for the entire handler.</p>
+<h3 id="Concurrency"><a href="#Concurrency" class="headerlink" title="Concurrency"></a>Concurrency</h3><p>Rule 4: It’s usually a bad idea to hold a lock while doing anything<br>that might wait: reading a Go channel, sending on a channel, waiting<br>for a timer, calling time.Sleep(), or sending an RPC (and waiting for the<br>reply). One reason is that you probably want other goroutines to make<br>progress during the wait. Another reason is deadlock avoidance. Imagine<br>two peers sending each other RPCs while holding locks; both RPC<br>handlers need the receiving peer’s lock; neither RPC handler can ever<br>complete because it needs the lock held by the waiting RPC call.</p>
+<p>Code that waits should first release locks. If that’s not convenient,<br>sometimes it’s useful to create a separate goroutine to do the wait.</p>
+<p>Rule 5: Be careful about assumptions across a drop and re-acquire of a<br>lock. One place this can arise is when avoiding waiting with locks<br>held. For example, this code to send vote RPCs is incorrect:</p>
+<p>  rf.mu.Lock()<br>  rf.currentTerm +&#x3D; 1<br>  rf.state &#x3D; Candidate<br>  for <each peer> {<br>    go func() {<br>      rf.mu.Lock()<br>      args.Term &#x3D; rf.currentTerm<br>      rf.mu.Unlock()<br>      Call(“Raft.RequestVote”, &amp;args, …)<br>      &#x2F;&#x2F; handle the reply…<br>    } ()<br>  }<br>  rf.mu.Unlock()</p>
+<p>The code sends each RPC in a separate goroutine. It’s incorrect<br>because args.Term may not be the same as the rf.currentTerm at which<br>the surrounding code decided to become a Candidate. Lots of time may<br>pass between when the surrounding code creates the goroutine and when<br>the goroutine reads rf.currentTerm; for example, multiple terms may<br>come and go, and the peer may no longer be a candidate. One way to fix<br>this is for the created goroutine to use a copy of rf.currentTerm made<br>while the outer code holds the lock. Similarly, reply-handling code<br>after the Call() must re-check all relevant assumptions after<br>re-acquiring the lock; for example, it should check that<br>rf.currentTerm hasn’t changed since the decision to become a<br>candidate.</p>
+<p>It can be difficult to interpret and apply these rules. Perhaps most<br>puzzling is the notion in Rules 2 and 3 of code sequences that<br>shouldn’t be interleaved with other goroutines’ reads or writes. How<br>can one recognize such sequences? How should one decide where a<br>sequence ought to start and end?</p>
+<p>One approach is to start with code that has no locks, and think<br>carefully about where one needs to add locks to attain correctness.<br>This approach can be difficult since it requires reasoning about the<br>correctness of concurrent code.</p>
+<p>A more pragmatic approach starts with the observation that if there<br>were no concurrency (no simultaneously executing goroutines), you<br>would not need locks at all. But you have concurrency forced on you<br>when the RPC system creates goroutines to execute RPC handlers, and<br>because you need to send RPCs in separate goroutines to avoid waiting.<br>You can effectively eliminate this concurrency by identifying all<br>places where goroutines start (RPC handlers, background goroutines you<br>create in Make(), &amp;c), acquiring the lock at the very start of each<br>goroutine, and only releasing the lock when that goroutine has<br>completely finished and returns. This locking protocol ensures that<br>nothing significant ever executes in parallel; the locks ensure that<br>each goroutine executes to completion before any other goroutine is<br>allowed to start. With no parallel execution, it’s hard to violate<br>Rules 1, 2, 3, or 5. If each goroutine’s code is correct in isolation<br>(when executed alone, with no concurrent goroutines), it’s likely to<br>still be correct when you use locks to suppress concurrency. So you<br>can avoid explicit reasoning about correctness, or explicitly<br>identifying critical sections.</p>
+<p>However, Rule 4 is likely to be a problem. So the next step is to find<br>places where the code waits, and to add lock releases and re-acquires<br>(and&#x2F;or goroutine creation) as needed, being careful to re-establish<br>assumptions after each re-acquire. You may find this process easier to<br>get right than directly identifying sequences that must be locked for<br>correctness.</p>
+<p>(As an aside, what this approach sacrifices is any opportunity for<br>better performance via parallel execution on multiple cores: your code<br>is likely to hold locks when it doesn’t need to, and may thus<br>unnecessarily prohibit parallel execution of goroutines. On the other<br>hand, there is not much opportunity for CPU parallelism within a<br>single Raft peer.)</p>
+<h3 id="Correctness-in-stress-tests"><a href="#Correctness-in-stress-tests" class="headerlink" title="Correctness in stress tests"></a>Correctness in stress tests</h3><p>The program passes 10000 2A tests with 300 concurrent tests but failes with 400.<br>The main reason maybe the test itself. The test use a object in memory to emulate a network. So when the system is extremely resource-constrained, the fake network in the process may not be scheduled on CPU so the message delivery is delayed long enough to cause the test failed. But this doesn’t mean Raft is incorrect. In 2AInitialTest, the problem is that servers disagree on the term. But the dissent will eventually be eliminated because the leader with larger term will establish authority if the failure is tolertable.<br>Another potential problem is if the machine is under heavy load, for example, CPU and memory is severely constrained, the electionTimer may not work correctly. The reason is the timer&#x2F;ticker implemented in go is checked iteratively by a goroutine. So when the goroutine cannot be scheduled on CPU, the timer&#x2F;ticker cannot fire correctly and precisely. Thus, in Raft case, the election timer cannot fire precisely.</p>
+<h3 id="Deadlock"><a href="#Deadlock" class="headerlink" title="Deadlock"></a>Deadlock</h3><p>The story is that I acquire a read lock and only release it in certain conditions. I guess the best practice is never acquiring and releasing a lock at different levels. And maybe never seperate the two operations too far away from each other, for example,by writing more than 20 lines between them.</p>
+<h3 id="Problems-in-tests"><a href="#Problems-in-tests" class="headerlink" title="Problems in tests"></a>Problems in tests</h3><p>The program also pass 19999 tests in 20000 tests. The failed one is caused by the wrong implementations of tests.<br>Specifically, when there are two leaders in the network, the client have to wait until only one leader is left, while the test just picks the one with a smaller id.<br>It can be proved that when there is only one leader, it’s safe to submit commands. The two leader scene can only caused by network partitions that isolate an old leader from the majority and force the new leader with a larger term to be picked. Then when the network partition disappeared, the old leader cannot beat the new leader because the old leader has a smaller term.</p>
+<p>It basically passes all the tests in 2ABCD except sometimes fail in 2B tests because of the test itself or because of other not-so-well implementations.<br>Read the TODOs in the code and consider improving the code based on those TODOs.<br>But the TODOs may not be perfectly correct. It’s hard to see if it’s correct without testing.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>Raft paper: <a target="_blank" rel="noopener" href="https://raft.github.io/raft.pdf">https://raft.github.io/raft.pdf</a></p>
+
+    
+  </article>
+
+  
+      
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Distributed-System/" rel="tag">Distributed System</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1708839017877"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Raft"><span class="toc-number">1.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-racing"><span class="toc-number">1.1.</span> <span class="toc-text">data racing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Granularity-of-locks"><span class="toc-number">1.2.</span> <span class="toc-text">Granularity of locks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Concurrency"><span class="toc-number">1.3.</span> <span class="toc-text">Concurrency</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Correctness-in-stress-tests"><span class="toc-number">1.4.</span> <span class="toc-text">Correctness in stress tests</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deadlock"><span class="toc-number">1.5.</span> <span class="toc-text">Deadlock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Problems-in-tests"><span class="toc-number">1.6.</span> <span class="toc-text">Problems in tests</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">2.</span> <span class="toc-text">Reference</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
